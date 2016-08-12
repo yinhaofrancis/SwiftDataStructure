@@ -7,9 +7,6 @@
 //
 
 import Foundation
-var l = ChainList<Int>()
-[1,2,3,4,5].forEach { (i) in
-    l.addFirst(i)
-}
-l.insert(9, index: 2)
-l.display()
+let k:LinkedList = [1,2,3,4,5]
+let n = LinkedList.insert(k, element: 19) {$0 == 4}
+print(n)
