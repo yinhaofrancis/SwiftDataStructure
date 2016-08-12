@@ -9,4 +9,3 @@
 import Foundation
 let k:LinkedList = [1,2,3,4,5]
 let n = LinkedList.insert(k, element: 19) {$0 == 4}
-print(n)

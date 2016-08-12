@@ -32,6 +32,11 @@ indirect enum LinkedList<Item where Item:Comparable>{
     init(element:Element,next:LinkedList<Element>){
         self = .Node(element: element, next: next)
     }
+    mutating func setElement(element:Element){
+        if case let .Node(_,n) = self{
+            self = LinkedList(element: element, next: n)
+        }
+    }
     init(){
         self = .Empty
     }
@@ -104,5 +109,4 @@ extension LinkedList :ArrayLiteralConvertible{
             self = LinkedList(element:e, next: LinkedList(elements: elements, index: index + 1))
         }
     }
-
 }
