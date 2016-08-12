@@ -11,6 +11,7 @@
 		B23121FF1D5C115400763644 /* tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23121FE1D5C115400763644 /* tree.swift */; };
 		B23122021D5C3B7400763644 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23122011D5C3B7400763644 /* LinkedList.swift */; };
 		B298F3771D5D5D0B001370D7 /* RBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3761D5D5D0B001370D7 /* RBTree.swift */; };
+		B298F3791D5DA51E001370D7 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3781D5DA51E001370D7 /* List.swift */; };
 		B2D1D0371D5AFD1900D83F19 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1D0361D5AFD1900D83F19 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		B23121FE1D5C115400763644 /* tree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tree.swift; sourceTree = "<group>"; };
 		B23122011D5C3B7400763644 /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
 		B298F3761D5D5D0B001370D7 /* RBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBTree.swift; sourceTree = "<group>"; };
+		B298F3781D5DA51E001370D7 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		B2D1D0331D5AFD1900D83F19 /* d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = d; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D1D0361D5AFD1900D83F19 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +72,7 @@
 				B23122011D5C3B7400763644 /* LinkedList.swift */,
 				B23121FE1D5C115400763644 /* tree.swift */,
 				B298F3761D5D5D0B001370D7 /* RBTree.swift */,
+				B298F3781D5DA51E001370D7 /* List.swift */,
 			);
 			path = d;
 			sourceTree = "<group>";
@@ -136,6 +139,7 @@
 				B23122021D5C3B7400763644 /* LinkedList.swift in Sources */,
 				B23121FD1D5C113D00763644 /* LineRegion.swift in Sources */,
 				B23121FF1D5C115400763644 /* tree.swift in Sources */,
+				B298F3791D5DA51E001370D7 /* List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

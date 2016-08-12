@@ -7,5 +7,9 @@
 //
 
 import Foundation
-let k:LinkedList = [1,2,3,4,5]
-let n = LinkedList.insert(k, element: 19) {$0 == 4}
+var i:List<Int> = [1,2,3,4,5,6,7,8]
+i.append(12)
+print(i)
+print(i.removeAtIndex(7))
+print(i)
+print(i[3])
