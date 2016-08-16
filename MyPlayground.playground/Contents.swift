@@ -57,3 +57,44 @@ func quickSort<Element:Comparable>(list:[Element])->[Element]{
     }
 }
 quickSort([4,3,1,2,5,9,5])
+
+func + <X,Y,Z>(A: X->Y, B:Y->Z)->X->Z{
+    return {return B(A($0))}
+}
+
+func add<T:IntegerType>(a:T)->T->T{
+    return { a + $0 }
+}
+func mul<T:IntegerType>(a:T)->T->T{
+    return { a * $0}
+}
+func addOne<T:IntegerType>(a:T)->T{
+    return a + 1
+}
+(add(1) + mul(10) + add(11))(1)
+
+
+extension Array{
+    static func repeatWith(element:Element)->Int->[Element]{
+        func repeatDo(count:Int)->[Element]{
+            switch count {
+            case 0:
+                return []
+            default:
+                return [element] + repeatDo(count - 1)
+            }
+        }
+        return repeatDo
+    }
+    func fill(element:Element)->Int->[Element]{
+        return {
+            if self.count < $0{
+                let newArray = Array.repeatWith(element)($0 - self.count)
+                return self + newArray
+            }else{
+                return self
+            }
+        }
+    }
+}
+[1,2,3].fill(0)(10)
