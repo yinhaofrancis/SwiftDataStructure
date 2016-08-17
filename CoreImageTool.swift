@@ -7,8 +7,14 @@
 //
 
 import Foundation
+import OpenGLES
+import GLKit
 import CoreImage
 typealias Filter = CIImage -> CIImage
+
+typealias Stability = CIImage -> CGImage
+
+typealias Context = CIImage -> CGRect? ->Void
 
 typealias Vector2 = (CGFloat,CGFloat)
 
@@ -17,10 +23,11 @@ typealias Vector3 = (CGFloat,CGFloat,CGFloat)
 typealias Vector4 = (CGFloat,CGFloat,CGFloat,CGFloat)
 
 typealias Matrix4_4 = (Vector4,Vector4,Vector4,Vector4) // | Vector4 |
-                                                        // | Vector4 |
-                                                        // | Vector4 |
-                                                        // | Vector4 |
+// | Vector4 |
+// | Vector4 |
+// | Vector4 |
 typealias Coefficients = Array<CGFloat>
+
 let IdentityMatrix4_4:Matrix4_4 = (
     (1,0,0,0),
     (0,1,0,0),
@@ -34,18 +41,11 @@ let CoefficientsMatrix4_4:Matrix4_4 = (
     (0,1,0,0),
     (0,1,0,0)
 )
+
 struct ColorCoefficients {
     var red:Coefficients = [1,0,0,0,0,0,0,0,0,0]
     var green:Coefficients = [0,1,0,0,0,0,0,0,0,0]
     var blue:Coefficients = [0,0,1,0,0,0,0,0,0,0]
-}
-
-func TranslateVector(matrix:Matrix4_4)->(CIVector,CIVector,CIVector,CIVector){
-    return (CIVector(vector: matrix.0),
-            CIVector(vector: matrix.1),
-            CIVector(vector: matrix.2),
-            CIVector(vector: matrix.3)
-    )
 }
 
 extension Array{
@@ -60,6 +60,7 @@ extension Array{
         }
         return repeatDo
     }
+    
     func fill(element:Element)->Int->[Element]{
         return {
             if self.count < $0{
@@ -89,6 +90,30 @@ extension CIColor {
         self.init(red: color.0, green: color.1,blue: color.2,alpha: color.3)
     }
 }
+extension CIFilter{
+    func setVector(vector:Vector2?,name:String){
+        if let v = vector{
+            setValue(CIVector(vector: v), forKey: name)
+        }
+    }
+    func setVector(vector:Vector3?,name:String){
+        if let v = vector{
+            setValue(CIVector(vector: v), forKey: name)
+        }
+    }
+    func setVector(vector:Vector4?,name:String){
+        if let v = vector{
+            setValue(CIVector(vector: v), forKey: name)
+        }
+    }
+    func setColor(vector:Vector4?,name:String){
+        if let v = vector{
+            setValue(CIColor(color: v), forKey: name)
+        }
+    }
+}
+
+
 
 func + <X,Y,Z>(A: X->Y, B:Y->Z)->X->Z{
     return {return B(A($0))}
@@ -180,9 +205,9 @@ func NoiseReduction(NoiseLevel:Float?,sharpness:Float?)->Filter{
 }
 
 
-func ZoomBlur(center:Vector2,amount:Float)->Filter{
+func ZoomBlur(center:Vector2?,amount:Float)->Filter{
     let filter = CIFilter(name: "CIZoomBlur")
-    filter?.setValue(CIVector(vector: center), forKey: "inputCenter")
+    filter?.setVector(center, name: "inputCenter")
     filter?.setValue(amount, forKey: "inputAmount")
     return {
         filter?.setValue($0, forKey: "inputImage")
@@ -193,12 +218,8 @@ func ZoomBlur(center:Vector2,amount:Float)->Filter{
 
 func ColorClamp(min:Vector4?,max:Vector4?)->Filter{
     let filter = CIFilter(name: "CIColorClamp")
-    if let m = min{
-        filter?.setValue(CIVector(vector: m), forKey: "inputMinComponents")
-    }
-    if let m = max {
-        filter?.setValue(CIVector(vector: m), forKey: "inputMaxComponents")
-    }
+    filter?.setVector(min, name: "inputMinComponents")
+    filter?.setVector(max, name: "inputMaxComponents")
     return {
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
@@ -207,11 +228,11 @@ func ColorClamp(min:Vector4?,max:Vector4?)->Filter{
 
 func ColorMatrix(matrix:Matrix4_4 = IdentityMatrix4_4,bias:Vector4 = (0,0,0,0))->Filter{
     let filter = CIFilter(name: "CIColorMatrix")
-    let m = TranslateVector(matrix)
-    filter?.setValue(m.0, forKey: "inputRVector")
-    filter?.setValue(m.1, forKey: "inputGVector")
-    filter?.setValue(m.2, forKey: "inputBVector")
-    filter?.setValue(m.3, forKey: "inputAVector")
+    filter?.setVector(matrix.0, name: "inputRVector")
+    filter?.setVector(matrix.1, name: "inputGVector")
+    filter?.setVector(matrix.2, name: "inputBVector")
+    filter?.setVector(matrix.3, name: "inputAVector")
+    
     filter?.setValue(CIVector(vector: bias), forKey: "inputBiasVector")
     return {
         filter?.setValue($0, forKey: "inputImage")
@@ -221,12 +242,12 @@ func ColorMatrix(matrix:Matrix4_4 = IdentityMatrix4_4,bias:Vector4 = (0,0,0,0))-
 
 
 func ColorPolynomial(matrix:Matrix4_4 = CoefficientsMatrix4_4)->Filter{
-    let m = TranslateVector(matrix)
+    
     let filter = CIFilter(name: "CIColorPolynomial")
-    filter?.setValue(m.0, forKey: "inputRedCoefficients")
-    filter?.setValue(m.1, forKey: "inputGreenCoefficients")
-    filter?.setValue(m.2, forKey: "inputBlueCoefficients")
-    filter?.setValue(m.3, forKey: "inputAlphaCoefficients")
+    filter?.setVector(matrix.0, name: "inputRedCoefficients")
+    filter?.setVector(matrix.1, name: "inputGreenCoefficients")
+    filter?.setVector(matrix.2, name: "inputBlueCoefficients")
+    filter?.setVector(matrix.3, name: "inputAlphaCoefficients")
     return{
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
@@ -271,10 +292,10 @@ func SRGBToneCurveToLinear()->Filter{
     }
 }
 
-func TemperatureAndTint(Neutral:Vector2 = (6500,0),TargetNeutral:Vector2 = (6500,0))->Filter{
+func TemperatureAndTint(Neutral:Vector2?,TargetNeutral:Vector2?)->Filter{
     let filter = CIFilter(name: "CITemperatureAndTint")
-    filter?.setValue(CIVector(vector: Neutral), forKey: "inputNeutral")
-    filter?.setValue(CIVector(vector: TargetNeutral), forKey: "inputTargetNeutral")
+    filter?.setVector(Neutral, name: "inputNeutral")
+    filter?.setVector(TargetNeutral, name: "inputTargetNeutral")
     return {
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
@@ -287,11 +308,11 @@ func ToneCurve(p0:Vector2 = (0,0),
                p3:Vector2 = (0.75,0.75),
                p4:Vector2 = (1,1))->Filter{
     let filter = CIFilter(name: "CIToneCurve")
-    filter?.setValue(CIVector(vector: p0), forKey: "inputPoint0")
-    filter?.setValue(CIVector(vector: p1), forKey: "inputPoint1")
-    filter?.setValue(CIVector(vector: p2), forKey: "inputPoint2")
-    filter?.setValue(CIVector(vector: p3), forKey: "inputPoint3")
-    filter?.setValue(CIVector(vector: p4), forKey: "inputPoint4")
+    filter?.setVector(p0, name: "inputPoint0")
+    filter?.setVector(p1, name: "inputPoint1")
+    filter?.setVector(p2, name: "inputPoint2")
+    filter?.setVector(p3, name: "inputPoint3")
+    filter?.setVector(p4, name: "inputPoint4")
     return {
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
@@ -309,7 +330,7 @@ func Vibrance(Amount:Float?)->Filter{
 
 func WhitePointAdjust(color:Vector4) ->Filter{
     let filter = CIFilter(name: "CIWhitePointAdjust")
-    filter?.setValue(CIColor(color:color), forKey: "inputColor")
+    filter?.setColor(color, name: "inputColor")
     return {
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
@@ -324,6 +345,239 @@ func ColorCrossPolynomial(coefficients:ColorCoefficients)->Filter{
     return {
         filter?.setValue($0, forKey: "inputImage")
         return filter!.outputImage!
+    }
+}
+//func ColorCube(CubeDimension:Int,@noescape data:(b:Int,g:Int,r:Int)->(Float,Float,Float,Float))->Filter{
+//    var mdata:[Float] = []
+//    for b in 0 ..< CubeDimension{
+//        for g in 0 ..< CubeDimension{
+//            for r in 0 ..< CubeDimension {
+//                let colorInfo = data(b: b, g: g, r: r)
+//                let colorList = [colorInfo.0,colorInfo.1,colorInfo.2,colorInfo.3]
+//                mdata += colorList
+//            }
+//        }
+//    }
+//    let filter = CIFilter(name: "CIColorCube")
+//    filter?.setValue(CubeDimension, forKey: "inputCubeDimension")
+//    print(mdata)
+//    return {
+//        let colorData = NSData(bytesNoCopy: &mdata, length: sizeof(Float) * CubeDimension * CubeDimension * CubeDimension, freeWhenDone: false)
+//        filter?.setValue(colorData, forKey: "inputCubeData")
+//        filter?.setValue($0, forKey: "inputImage")
+//        return filter!.outputImage!
+//    }
+//}
+
+func ColorInvert()->Filter{
+    let filter = CIFilter(name: "CIColorInvert")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func ColorMap(GradientImage:CIImage)->Filter{
+    let  filter = CIFilter(name: "CIColorMap")
+    filter?.setValue(GradientImage, forKey: "inputGradientImage")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func ColorMonochrome(color:Vector4?,Intensity:Float?)->Filter{
+    let filter = CIFilter(name: "CIColorMonochrome")
+    if let c  = color {
+        filter?.setValue(CIColor(color:c), forKey: "inputColor")
+    }
+    filter?.setValue(Intensity, forKey: "inputIntensity")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func ColorPosterize(levels:Float?)->Filter{
+    let filter = CIFilter(name: "CIColorPosterize")
+    filter?.setValue(levels, forKey: "inputLevels")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func FalseColor(color1:Vector4,color2:Vector4)->Filter{
+    let filter = CIFilter(name: "CIFalseColor")
+    filter?.setColor(color1, name: "inputColor0")
+    filter?.setColor(color2, name: "inputColor1")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func MaskToAlpha()->Filter{
+    let filter = CIFilter(name: "CIMaskToAlpha")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func MaximumComponent()->Filter{
+    let filter = CIFilter(name: "CIMaximumComponent")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func MinimumComponent()->Filter{
+    let filter = CIFilter(name: "CIMinimumComponent")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func PhotoEffectChrome()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectChrome")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+func PhotoEffectFade()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectFade")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+func PhotoEffectInstant()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectInstant")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func PhotoEffectMono()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectMono")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func PhotoEffectNoir()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectNoir")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func PhotoEffectProcess()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectProcess")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func PhotoEffectTonal()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectTonal")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+
+func PhotoEffectTransfer()->Filter{
+    let filter = CIFilter(name: "CIPhotoEffectTransfer")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func SepiaTone(Intensity:Float?)->Filter{
+    let filter = CIFilter(name: "CISepiaTone")
+    filter?.setValue(Intensity, forKey: "inputIntensity")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func Vignette(Radius:Float?,Intensity:Float?)->Filter{
+    let filter = CIFilter(name: "CISepiaTone")
+    filter?.setValue(Intensity, forKey: "inputIntensity")
+    filter?.setValue(Radius, forKey: "inputRadius")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+func VignetteEffect(Center:Vector2,Radius:Float?,Intensity:Float?)->Filter{
+    let filter = CIFilter(name: "CIVignetteEffect")
+    filter?.setVector(Center, name: "inputCenter")
+    filter?.setValue(Intensity, forKey: "inputIntensity")
+    filter?.setValue(Radius, forKey: "inputRadius")
+    return {
+        filter?.setValue($0, forKey: "inputImage")
+        return filter!.outputImage!
+    }
+}
+
+@available(iOS 9.0,*)
+func ContextCoreGraphics(context:CGContext) -> Context {
+    let ctx = CIContext(CGContext: context, options: nil)
+    return { image in
+        return {
+            let start = CGPointZero
+            CGContextSaveGState(context)
+            CGContextRotateCTM(context, 0)
+            CGContextScaleCTM(context, 1, 1)
+            CGContextTranslateCTM(context, 0, 0)
+            CGContextScaleCTM(context, 1, -1)
+            
+            if let rect = $0{
+                CGContextTranslateCTM(context, 0, CGFloat(-rect.height))
+                let origin = CGPointApplyAffineTransform(rect.origin, CGAffineTransformMakeScale(1, -1))
+                ctx.drawImage(image, inRect: CGRect(origin: origin,size: rect.size), fromRect: image.extent)
+            }else{
+                let width = CGBitmapContextGetWidth(context) / Int(UIScreen.mainScreen().scale)
+                let height = CGBitmapContextGetWidth(context) / Int(UIScreen.mainScreen().scale)
+                CGContextTranslateCTM(context, 0, CGFloat(-height))
+                ctx.drawImage(image, inRect: CGRect(origin: start,size: CGSize(width: width,height: height)), fromRect: image.extent)
+            }
+            CGContextRestoreGState(context)
+        }
+    }
+    
+}
+
+func ContextOpenGL(context:EAGLContext)->Context{
+    let ctx = CIContext(EAGLContext: context)
+    return{ image in
+        return{
+            guard let rect = $0 else{
+                return
+            }
+            ctx.drawImage(image, inRect: rect, fromRect: image.extent)
+        }
+        
+    }
+}
+
+func render(context:CIContext)->Stability{
+    return { image in
+        return context.createCGImage(image, fromRect: image.extent)
     }
 }
 

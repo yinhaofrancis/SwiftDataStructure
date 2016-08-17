@@ -8,3 +8,4 @@
 
 import Foundation
 import CoreImage
+let context = CIContext(

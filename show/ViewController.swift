@@ -18,18 +18,9 @@ class ViewController: UIViewController {
         
         self.orgin.image =  UIImage(named: "d")!
         let Cii = CIImage(image:self.orgin.image!)
-//        let matrix:Matrix4_4 = (
-//            (0,0,0,0.4),
-//            (0,0,0.4,0.8),
-//            (0,0,0.4,1),
-//            (0,1,1,1)
-//        )
-        if #available(iOS 9.0, *) {
-            let image = (NoiseReduction(nil, sharpness: nil) + ColorCrossPolynomial(ColorCoefficients(red: [1], green: [0,1], blue: [0,0,1])))(Cii!)
-            self.image.image = UIImage(CIImage: image)
-        } else {
-            // Fallback on earlier versions
-        }
+        let  pip = PhotoEffectChrome() + PhotoEffectInstant() + render(CIContext(EAGLContext: EAGLContext(API: .OpenGLES2)))
+        
+        image.image = UIImage(CGImage: pip(Cii!))
         
     }
     override func didReceiveMemoryWarning() {
@@ -39,4 +30,3 @@ class ViewController: UIViewController {
 
 
 }
-
