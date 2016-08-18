@@ -10,7 +10,7 @@ import UIKit
 import GLKit
 import OpenGLES
 class nViewController: UIViewController {
-
+    typealias PP = PictureProcess
     @IBOutlet weak var gv: GLKView!
     let context = EAGLContext(API: .OpenGLES2)
     var link:CADisplayLink?
@@ -19,7 +19,7 @@ class nViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         gv.context = context
-        let a = (PhotoEffectChrome() + PhotoEffectInstant() + ContextOpenGL(self.gv.context))
+        let a = (PP.PhotoEffectChrome() + PP.PhotoEffectInstant() + PP.ContextOpenGL(self.gv.context))
 //        self.gv.bindDrawable()
         pip = a
         EAGLContext.setCurrentContext(context)

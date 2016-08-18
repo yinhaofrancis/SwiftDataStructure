@@ -18,9 +18,11 @@
 		B23FF4D71D62D9F800CAAFC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B23FF4D61D62D9F800CAAFC4 /* Assets.xcassets */; };
 		B23FF4DA1D62D9F800CAAFC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B23FF4D81D62D9F800CAAFC4 /* LaunchScreen.storyboard */; };
 		B23FF4FB1D62DA1F00CAAFC4 /* CoreImageTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23FF4C51D62D3D600CAAFC4 /* CoreImageTool.swift */; };
+		B246BC031D6588BB00BBF648 /* HSList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B246BC021D6588BB00BBF648 /* HSList.swift */; };
 		B298F3771D5D5D0B001370D7 /* RBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3761D5D5D0B001370D7 /* RBTree.swift */; };
 		B298F3791D5DA51E001370D7 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3781D5DA51E001370D7 /* List.swift */; };
 		B2D1D0371D5AFD1900D83F19 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1D0361D5AFD1900D83F19 /* main.swift */; };
+		B2F306AD1D654EBE00D1D9EE /* CGDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F306AC1D654EBE00D1D9EE /* CGDraw.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,10 +55,12 @@
 		B23FF4E61D62D9F900CAAFC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B23FF4EF1D62D9F900CAAFC4 /* showUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = showUITests.swift; sourceTree = "<group>"; };
 		B23FF4F11D62D9F900CAAFC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B246BC021D6588BB00BBF648 /* HSList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HSList.swift; sourceTree = "<group>"; };
 		B298F3761D5D5D0B001370D7 /* RBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBTree.swift; sourceTree = "<group>"; };
 		B298F3781D5DA51E001370D7 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		B2D1D0331D5AFD1900D83F19 /* d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = d; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D1D0361D5AFD1900D83F19 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B2F306AC1D654EBE00D1D9EE /* CGDraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGDraw.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				B23FF4C51D62D3D600CAAFC4 /* CoreImageTool.swift */,
+				B2F306AC1D654EBE00D1D9EE /* CGDraw.swift */,
 				B23FF4CF1D62D9F800CAAFC4 /* AppDelegate.swift */,
 				B23FF4D11D62D9F800CAAFC4 /* ViewController.swift */,
 				B23FF4D31D62D9F800CAAFC4 /* Main.storyboard */,
@@ -141,6 +146,7 @@
 				B23121FE1D5C115400763644 /* tree.swift */,
 				B298F3761D5D5D0B001370D7 /* RBTree.swift */,
 				B298F3781D5DA51E001370D7 /* List.swift */,
+				B246BC021D6588BB00BBF648 /* HSList.swift */,
 			);
 			path = d;
 			sourceTree = "<group>";
@@ -238,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B23FF4FB1D62DA1F00CAAFC4 /* CoreImageTool.swift in Sources */,
+				B2F306AD1D654EBE00D1D9EE /* CGDraw.swift in Sources */,
 				B227798F1D64513A004B44C7 /* nViewController.swift in Sources */,
 				B23FF4D21D62D9F800CAAFC4 /* ViewController.swift in Sources */,
 				B23FF4D01D62D9F800CAAFC4 /* AppDelegate.swift in Sources */,
@@ -253,6 +260,7 @@
 				B23122021D5C3B7400763644 /* LinkedList.swift in Sources */,
 				B23121FD1D5C113D00763644 /* LineRegion.swift in Sources */,
 				B23121FF1D5C115400763644 /* tree.swift in Sources */,
+				B246BC031D6588BB00BBF648 /* HSList.swift in Sources */,
 				B298F3791D5DA51E001370D7 /* List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

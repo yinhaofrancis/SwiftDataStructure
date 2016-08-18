@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    typealias p = PictureProcess
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var orgin: UIImageView!
     override func viewDidLoad() {
@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         
         self.orgin.image =  UIImage(named: "d")!
         let Cii = CIImage(image:self.orgin.image!)
-        let  pip = PhotoEffectChrome() + PhotoEffectInstant() + render(CIContext(EAGLContext: EAGLContext(API: .OpenGLES2)))
+        let  pip =  p.PhotoEffectChrome() + p.PhotoEffectInstant() + p.render(CIContext(EAGLContext: EAGLContext(API: .OpenGLES2)))
         
         image.image = UIImage(CGImage: pip(Cii!))
         
