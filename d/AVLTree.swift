@@ -30,21 +30,86 @@ indirect enum AVLTree<Element:Comparable> {
         }else {
             l.insert(element)
         }
-        self = AVLTree(value: e, left: l, right: r)
-        if l.depth - r.depth > 1{
-            self.rotationRight()
+        self = AVLTree<Element>(value: e,left: l,right:r)
+    }
+    mutating func delete(filter: Element->Bool){
+        if case  .Node(let e,var l,var r) = self{
+            if filter(e){
+                l.delete(filter)
+                r.delete(filter)
+                self = AVLTree(value: e, left: l, right: r)
+                if filter(e){
+                    self.delete()
+                }
+            }
+        }        
+    }
+    private mutating func delete()->AVLTree<Element>{
+        let temp = self
+        guard case .Node(_,let l,var r)  = self else{
+            return .Leaf
         }
-        if r.depth - l.depth > 1{
-            self.rotationLeft()
+        if case .Leaf = l {
+            self = l
+            return temp
         }
+        if case .Leaf = r {
+            self = r
+            return temp
+        }else{
+            if case let .Node(e,l,r) = r,case .Leaf = l{
+                if case let .Node(_,ll,_) = self{
+                    self = AVLTree(value: e,left: ll,right: r)
+                    return temp
+                }else{
+                    return temp
+                }
+            }
+            else{
+                let min = r.deleteMin()
+                self = AVLTree(value: min, left: l, right: r)
+                return temp
+            }
+        }
+    }
+    mutating func deleteMin()->Element{
+        guard case .Node(let e,var l,let r) = self else{
+            fatalError("tree is nil")
+        }
+        if case .Leaf = l{
+            self = r
+            return e
+        }else{
+            let rs = l.deleteMin()
+            self = AVLTree(value: e, left: l, right: r)
+            return rs
+        }
+    }
+    var maxNode:AVLTree<Element>{
+        guard case let .Node(_,_,r) = self else{
+            fatalError("tree is nil")
+        }
+        guard case .Leaf = r else{
+            return self
+        }
+        return self.maxNode
+    }
+    var minNode:AVLTree<Element>{
+        guard case let .Node(_,l,_) = self else{
+            fatalError("tree is nil")
+        }
+        guard case .Leaf = l else{
+            return self
+        }
+        return self.minNode
     }
     func see(){
         guard case let .Node(e,l,r) = self else{
             return
         }
-        print(e)
-        l.see()
         
+        l.see()
+        print(e)
         r.see()
         
     }
