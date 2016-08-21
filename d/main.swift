@@ -9,11 +9,9 @@
 import Foundation
 import CoreImage
 
-var k  = AVLTree<Int>()
+var k  = RBTree<Int>()
 
-for i in [4,2,6,1,3,5,7]{
+for i in [11,2,14,1,7,15,5,8,4]{
     k.insert(i)
 }
-k.delete({$0 == 4})
-k.see()
-
+k.display()

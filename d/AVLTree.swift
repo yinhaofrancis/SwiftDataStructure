@@ -7,10 +7,6 @@
 //
 
 import Foundation
-enum NodeColor{
-    case red
-    case black
-}
 indirect enum AVLTree<Element:Comparable> {
     case Node(element:Element,left:AVLTree<Element>,right:AVLTree<Element>)
     case Leaf
