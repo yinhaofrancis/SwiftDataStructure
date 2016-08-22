@@ -39,8 +39,9 @@ class TreeNode<Element>:Equatable{
         if self.isNil{
             return
         }
-        print(self.element,self.color)
+        
         self.left?.see()
+        print(self.element,self.color)
         self.right?.see()
     }
 }
@@ -132,11 +133,12 @@ class RBTree<Element:Comparable>{
                 else if node == node.parent?.right{
                     node = node.parent!
                     rotationLeft(node)
-                }
-                node.parent?.color = .Black
-                node.parent?.parent?.color = .Red
-                if node.parent?.parent != nil && !node.parent!.parent!.isNil{
-                    rotationRight(node.parent!.parent!)
+                }else{
+                    node.parent?.color = .Black
+                    node.parent?.parent?.color = .Red
+                    if node.parent?.parent != nil && !node.parent!.parent!.isNil{
+                        rotationRight(node.parent!.parent!)
+                    }
                 }
             }else{
                 let y = node.parent?.parent?.left
@@ -149,12 +151,12 @@ class RBTree<Element:Comparable>{
                 else if node == node.parent?.left{
                     node = node.parent!
                     rotationRight(node)
-                }
-                node.parent?.color = .Black
-                node.parent?.parent?.color = .Red
-                
-                if node.parent?.parent != nil && !node.parent!.parent!.isNil{
-                    rotationLeft(node.parent!.parent!)
+                }else{
+                    node.parent?.color = .Black
+                    node.parent?.parent?.color = .Red
+                    if node.parent?.parent != nil && !node.parent!.parent!.isNil{
+                        rotationLeft(node.parent!.parent!)
+                    }
                 }
             }
             self.root.color = .Black

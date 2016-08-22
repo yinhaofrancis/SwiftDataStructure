@@ -11,7 +11,7 @@ import CoreImage
 
 var k  = RBTree<Int>()
 
-for i in [11,2,14,1,7,15,5,8,4]{
+for i in [13,8,17,1,11,15,25,6,22,27]{
     k.insert(i)
 }
 k.display()
