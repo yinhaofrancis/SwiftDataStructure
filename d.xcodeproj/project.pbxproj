@@ -22,6 +22,7 @@
 		B298F3771D5D5D0B001370D7 /* AVLTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3761D5D5D0B001370D7 /* AVLTree.swift */; };
 		B298F3791D5DA51E001370D7 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = B298F3781D5DA51E001370D7 /* List.swift */; };
 		B2D1D0371D5AFD1900D83F19 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D1D0361D5AFD1900D83F19 /* main.swift */; };
+		B2EB67AF1D6E7FFE00266EBC /* heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EB67AE1D6E7FFE00266EBC /* heap.swift */; };
 		B2F306AD1D654EBE00D1D9EE /* CGDraw.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F306AC1D654EBE00D1D9EE /* CGDraw.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		B298F3781D5DA51E001370D7 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		B2D1D0331D5AFD1900D83F19 /* d */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = d; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2D1D0361D5AFD1900D83F19 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B2EB67AE1D6E7FFE00266EBC /* heap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = heap.swift; sourceTree = "<group>"; };
 		B2F306AC1D654EBE00D1D9EE /* CGDraw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGDraw.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,6 +144,7 @@
 			children = (
 				B2D1D0361D5AFD1900D83F19 /* main.swift */,
 				B278649F1D689140004E1D4B /* RBTree.swift */,
+				B2EB67AE1D6E7FFE00266EBC /* heap.swift */,
 				B23121FC1D5C113D00763644 /* LineRegion.swift */,
 				B23122011D5C3B7400763644 /* LinkedList.swift */,
 				B298F3761D5D5D0B001370D7 /* AVLTree.swift */,
@@ -258,6 +261,7 @@
 				B298F3771D5D5D0B001370D7 /* AVLTree.swift in Sources */,
 				B2D1D0371D5AFD1900D83F19 /* main.swift in Sources */,
 				B23122021D5C3B7400763644 /* LinkedList.swift in Sources */,
+				B2EB67AF1D6E7FFE00266EBC /* heap.swift in Sources */,
 				B27864A01D689140004E1D4B /* RBTree.swift in Sources */,
 				B23121FD1D5C113D00763644 /* LineRegion.swift in Sources */,
 				B246BC031D6588BB00BBF648 /* HSList.swift in Sources */,
