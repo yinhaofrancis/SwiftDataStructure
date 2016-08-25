@@ -9,9 +9,9 @@
 import Foundation
 import CoreImage
 
-var k  = RBTree<Int>()
-
-for i in [13,8,17,1,11,15,25,6,22,27]{
-    k.insert(i)
-}
-k.display()
+var he:heap = [3,2,4,6,1]
+print(he)
+he.RemoveTop()
+print(he)
+he.sort()
+print(he)
