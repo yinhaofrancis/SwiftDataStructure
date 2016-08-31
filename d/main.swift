@@ -9,7 +9,7 @@
 import Foundation
 import CoreImage
 
-var he:heap = [3,2,4,6,1]
+var he:heap = [3,2,4,6,1,5,8,7,11,9,10]
 print(he)
 he.RemoveTop()
 print(he)

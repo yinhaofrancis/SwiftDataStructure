@@ -25,14 +25,22 @@ class heap<T:Comparable>:ArrayLiteralConvertible,CustomStringConvertible{
         self.array.append(element)
         heapfy(self.array.count - 1,filter: filter)
     }
-    private func heapfy(to:Int, filter:(a:Element,b:Element)->Bool){
-        for i in 0 ... to - 1{
-            let j = to  - i
-            let p = parent(j)
-            if filter(a: array[j],b: array[p!]){
-                exchange(p!, index1: j)
-            }else{
-                continue
+    private func heapfy(end:Int, filter:(a:Element,b:Element)->Bool){
+        if let p = parent(end){
+            for i in 0 ... p{
+                let current = p - i
+                if let l = leftChild(current){
+                    if filter(a: array[l],b: array[current]){
+                        exchange(current, index1: l)
+                    }
+                }
+                if let r = rightChild(current){
+                    if r <= end{
+                        if filter(a: array[r],b: array[current]){
+                            exchange(current, index1: r)
+                        }
+                    }
+                }
             }
         }
     }

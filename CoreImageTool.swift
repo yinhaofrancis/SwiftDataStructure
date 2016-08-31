@@ -585,5 +585,4 @@ struct PictureProcess{
             return context.createCGImage(image, fromRect: image.extent)
         }
     }
-
 }
