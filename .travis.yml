@@ -1,2 +1,2 @@
 language: swift
-script: xcodebuild - project d.xcodeproj target -sdk iphonesimulator ONLY_ACTIVE_ATCH=NO
+script: xcodebuild - project d.xcodeproj -target show -sdk iphonesimulator ONLY_ACTIVE_ATCH=NO
